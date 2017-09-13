@@ -77,6 +77,7 @@ return [
 		'soft_version'  => '2013-12-26',                      //REST API version number remains unchanged
 	]
 ];
+```
 
 
 ## Security

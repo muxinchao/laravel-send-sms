@@ -3,14 +3,45 @@ namespace Laravel\Send\Sms\Agents;
 
 class RongLian
 {
-	private $AccountSid;
-	private $AccountToken;
-	private $AppId;
-	private $ServerIP;
-	private $ServerPort;
-	private $SoftVersion;
-	private $Batch;  //时间戳
-	private $BodyType = "json";//包体格式，可填值：json 、xml
+    /**
+     * 开发者主账号ACCOUNT SID
+     */
+	private $accountSid;
+
+    /**
+     * 开发者主账号AUTH TOKEN
+     */
+	private $accountToken;
+
+    /**
+     * 创建应用的APPID
+     */
+	private $appId;
+
+    /**
+     * 生产环境请求地址：app.cloopen.com
+     */
+	private $serverIP;
+
+    /**
+     * 请求端口
+     */
+	private $serverPort;
+
+    /**
+     * REST API版本号保持不变
+     */
+	private $softVersion;
+
+    /**
+     * 时间戳
+     */
+	private $batch;
+
+    /**
+     * 包体格式，可填值：json 、xml
+     */
+	private $bodyType = "json";
 
 	function __construct()
 	{
@@ -21,14 +52,13 @@ class RongLian
             $curCongfigs = include dirname(__DIR__) . '/config/default.php';
         }
         
-        // $curCongfigs        = require(dirname(__DIR__) . '/config/default.php');
-        $this->AccountSid   = $curCongfigs['RongLian']['account_sid'];
-        $this->AccountToken = $curCongfigs['RongLian']['account_token'];
-        $this->AppId        = $curCongfigs['RongLian']['app_id'];
-        $this->ServerIP     = $curCongfigs['RongLian']['server_ip'];
-        $this->ServerPort   = $curCongfigs['RongLian']['server_port'];
-        $this->SoftVersion  = $curCongfigs['RongLian']['soft_version'];
-		$this->Batch        = date("YmdHis");
+        $this->accountSid   = $curCongfigs['RongLian']['account_sid'];
+        $this->accountToken = $curCongfigs['RongLian']['account_token'];
+        $this->appId        = $curCongfigs['RongLian']['app_id'];
+        $this->serverIP     = $curCongfigs['RongLian']['server_ip'];
+        $this->serverPort   = $curCongfigs['RongLian']['server_port'];
+        $this->softVersion  = $curCongfigs['RongLian']['soft_version'];
+		$this->batch        = date("YmdHis");
 	}
 
     
@@ -52,7 +82,7 @@ class RongLian
         $result = curl_exec($ch);
         //连接失败
         if ($result == FALSE) {
-            if ($this->BodyType == 'json') {
+            if ($this->bodyType == 'json') {
                 $result = "{\"statusCode\":\"172001\",\"statusMsg\":\"网络错误\"}";
             } else {
                 $result = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><Response><statusCode>172001</statusCode><statusMsg>网络错误</statusMsg></Response>"; 
@@ -78,12 +108,12 @@ class RongLian
             return $auth;
         }
         // 拼接请求包体
-        if ($this->BodyType == "json") {
+        if ($this->bodyType == "json") {
             $data = "";
             for ($i=0; $i<count($datas); $i++) {
               $data = $data . "'" . $datas[$i] . "',"; 
             }
-            $body = "{'to':'$to','templateId':'$tempId','appId':'$this->AppId','datas':[".$data."]}";
+            $body = "{'to':'$to','templateId':'$tempId','appId':'$this->appId','datas':[".$data."]}";
         } else {
             $data = "";
             for ($i=0; $i<count($datas); $i++) {
@@ -91,29 +121,29 @@ class RongLian
             }
             $body = "<TemplateSMS>
                      <to>$to</to> 
-                     <appId>$this->AppId</appId>
+                     <appId>$this->appId</appId>
                      <templateId>$tempId</templateId>
                      <datas>" . $data . "</datas>
                      </TemplateSMS>";
         }
         // 大写的sig参数 
-        $sig =  strtoupper(md5($this->AccountSid . $this->AccountToken . $this->Batch));
+        $sig =  strtoupper(md5($this->accountSid . $this->accountToken . $this->batch));
         // 生成请求URL        
-        $url = "https://$this->ServerIP:$this->ServerPort/$this->SoftVersion/Accounts/$this->AccountSid/SMS/TemplateSMS?sig=$sig";
+        $url = "https://$this->serverIP:$this->serverPort/$this->softVersion/Accounts/$this->accountSid/SMS/TemplateSMS?sig=$sig";
         // 生成授权：主帐户Id + 英文冒号 + 时间戳。
-        $authen = base64_encode($this->AccountSid . ":" . $this->Batch);
+        $authen = base64_encode($this->accountSid . ":" . $this->batch);
         // 生成包头  
-        $header = array("Accept:application/$this->BodyType","Content-Type:application/$this->BodyType;charset=utf-8","Authorization:$authen");
+        $header = array("Accept:application/$this->bodyType","Content-Type:application/$this->bodyType;charset=utf-8","Authorization:$authen");
         // 发送请求
         $result = $this->curl_post($url, $body, $header);
-        if ($this->BodyType == "json") {//JSON格式
+        if ($this->bodyType == "json") {//JSON格式
            $datas = json_decode($result); 
         } else { //xml格式
            $datas = simplexml_load_string(trim($result," \t\n\r"));
         }
         //重新装填数据
         if ($datas->statusCode == 0) {
-            if ($this->BodyType == "json") {
+            if ($this->bodyType == "json") {
                 $datas->TemplateSMS = $datas->templateSMS;
                 unset($datas->templateSMS);   
             }
@@ -127,37 +157,37 @@ class RongLian
     */   
     function accAuth()
     {
-       if ($this->ServerIP == "") {
+       if ($this->serverIP == "") {
             $data             = new stdClass();
             $data->statusCode = '172004';
             $data->statusMsg  = 'IP为空';
             return $data;
         }
-        if ($this->ServerPort <= 0) {
+        if ($this->serverPort <= 0) {
             $data             = new stdClass();
             $data->statusCode = '172005';
             $data->statusMsg  = '端口错误（小于等于0）';
             return $data;
         }
-        if ($this->SoftVersion == "") {
+        if ($this->softVersion == "") {
             $data             = new stdClass();
             $data->statusCode = '172013';
             $data->statusMsg  = '版本号为空';
             return $data;
         } 
-        if ($this->AccountSid=="") {
+        if ($this->accountSid=="") {
             $data             = new stdClass();
             $data->statusCode = '172006';
             $data->statusMsg  = '主帐号为空';
             return $data;
         }
-        if ($this->AccountToken == "") {
+        if ($this->accountToken == "") {
             $data             = new stdClass();
             $data->statusCode = '172007';
             $data->statusMsg  = '主帐号令牌为空';
             return $data;
         }
-        if ($this->AppId == "") {
+        if ($this->appId == "") {
             $data             = new stdClass();
             $data->statusCode = '172012';
             $data->statusMsg  = '应用ID为空';

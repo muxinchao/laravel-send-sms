@@ -69,12 +69,12 @@ return [
 	],
 	//RongLian SMS platform
 	'RongLian' => [
-		'account_sid'   => '8a216da85e6fff2b015e74aba45d0235',//
-		'account_token' => 'c7ee385c4a804715a45b815271059e94',//
-		'app_id'        => '8a216da85e6fff2b015e74aba5ba023c',//
-		'server_ip'     => 'sandboxapp.cloopen.com',//
-		'server_port'   => '8883',//
-		'soft_version'  => '2013-12-26',//
+		'account_sid'   => '8a216da85e6fff2b015e74aba45d0235',//You can see the developer's primary account ACCOUNT SID on the front page of the console
+		'account_token' => 'c7ee385c4a804715a45b815271059e94',//You can see the developer 's main account on the front page of the console
+		'app_id'        => '8a216da85e6fff2b015e74aba5ba023c',//Use the APPID of the app already created in the Admin console
+		'server_ip'     => 'sandboxapp.cloopen.com',          //Test environment (production environment request address: app.cloopen.com)
+		'server_port'   => '8883',                            //Request port
+		'soft_version'  => '2013-12-26',                      //REST API version number remains unchanged
 	]
 ];
 

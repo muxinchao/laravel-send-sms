@@ -22,17 +22,11 @@ class ChuangLan
      * 创蓝253短信平台密码
      */
     protected $password;
-	/**
-	 * 
-	 */
 
     /**
      *  创蓝253短信平台url
      */
     protected $url;
-
-
-	protected static $configs = [];
 
     /**
      * 读取配置文件
@@ -44,11 +38,11 @@ class ChuangLan
         } else {
             $curCongfigs = include dirname(__DIR__) . '/config/default.php';
         }
-        // $curCongfigs    = include dirname(__DIR__) . '/config/default.php';
-        $this->account  = $curCongfigs['ChuangLan']['account'];
-        $this->password = $curCongfigs['ChuangLan']['password'];
-        $this->url      = $curCongfigs['ChuangLan']['url'];
+        $this->account   = $curCongfigs['ChuangLan']['account'];
+        $this->password  = $curCongfigs['ChuangLan']['password'];
+        $this->url       = $curCongfigs['ChuangLan']['url'];
     }
+
 	/**
 	 * 发送短信
 	 * @param $phone
@@ -72,7 +66,6 @@ class ChuangLan
     	$result = self::getCurlInit($data, $url);
 
         return $result;
-
 	}
 
     /**
@@ -93,13 +86,11 @@ class ChuangLan
 
         $result = preg_split("/[,\r\n]/", $output);
 
-        if($result[1] == 0) {
+        if ($result[1] == 0) {
             return "curl success";
         } else {
             return "curl error" . $result[1];
         }
-
     }
-
 }
 

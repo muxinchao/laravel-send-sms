@@ -147,7 +147,6 @@ class RongLian
                 unset($datas->templateSMS);
             }
         }
- 
         return $datas;
     }
 

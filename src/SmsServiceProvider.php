@@ -1,11 +1,11 @@
-<?php 
+<?php
 namespace Laravel\Send\Sms;
 
 use Illuminate\Support\ServiceProvider;
 
 class SmsServiceProvider extends ServiceProvider
 {
-	/**
+    /**
      * Indicates if loading of the provider is deferred.
      *
      * @var bool
@@ -19,9 +19,9 @@ class SmsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-    	$this->publishes([
-    		 __DIR__ . '/config/default.php' => config_path('sms.php'),
-    		]);
+        $this->publishes([
+             __DIR__ . '/config/default.php' => config_path('sms.php'),
+            ]);
     }
      /**
      * Register the application services.

@@ -1,17 +1,17 @@
-<?php 
+<?php
 namespace Laravel\Send\Sms\Agents;
 
 class ChuangLan
 {
-	/**
-	 * 手机号
-	 */
-	protected $phone;
+    /**
+     * 手机号
+     */
+    protected $phone;
 
-	/**
-	 * 短信内容
-	 */
-	protected $message;
+    /**
+     * 短信内容
+     */
+    protected $message;
 
     /**
      * 创蓝253短信平台账号
@@ -43,40 +43,39 @@ class ChuangLan
         $this->url       = $curCongfigs['ChuangLan']['url'];
     }
 
-	/**
-	 * 发送短信
-	 * @param $phone
-	 * @param $message
-	 */
-	public function sendSms($phone, $message)
-	{
-		$postData    = [];
-    	//获取信息数组
-    	$postData    = array(
+    /**
+     * 发送短信
+     * @param $phone
+     * @param $message
+     */
+    public function sendSms($phone, $message)
+    {
+        $postData    = [];
+        //获取信息数组
+        $postData    = array(
                 'un'    => $this->account,
                 'pw'    => $this->password,
                 'msg'   => $message,
                 'phone' => $phone,
                 'rd'    => 1,
             );
-    	$data   = http_build_query($postData);
+        $data   = http_build_query($postData);
 
-    	$url    = $this->url;
+        $url    = $this->url;
 
-    	$result = self::getCurlInit($data, $url);
+        $result = self::getCurlInit($data, $url);
 
         return $result;
-	}
+    }
 
     /**
      * 封装253短信平台，短信发送代码
-     * 
      */
-    private  static function getCurlInit($data, $url)
+    private static function getCurlInit($data, $url)
     {
-    	$curl = curl_init();
-    	curl_setopt($curl, CURLOPT_URL, $url);
-    	if (!empty($data)) {
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        if (!empty($data)) {
             curl_setopt($curl, CURLOPT_POST, 1);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         }
@@ -93,4 +92,3 @@ class ChuangLan
         }
     }
 }
-

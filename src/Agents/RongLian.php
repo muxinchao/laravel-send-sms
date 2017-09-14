@@ -46,11 +46,12 @@ class RongLian
     public function __construct()
     {
 
-        if (file_exists(config_path('sms.php'))) {
-            $curCongfigs = include config_path('sms.php');
-        } else {
-            $curCongfigs = include dirname(__DIR__) . '/config/default.php';
-        }
+        // if (file_exists(config_path('sms.php'))) {
+        //     $curCongfigs = include config_path('sms.php');
+        // } else {
+        //     $curCongfigs = include dirname(__DIR__) . '/config/default.php';
+        // }
+         $curCongfigs = include dirname(__DIR__) . '/config/default.php';
         $this->accountSid   = $curCongfigs['RongLian']['account_sid'];
         $this->accountToken = $curCongfigs['RongLian']['account_token'];
         $this->appId        = $curCongfigs['RongLian']['app_id'];

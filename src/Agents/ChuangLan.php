@@ -38,6 +38,7 @@ class ChuangLan
         } else {
             $curCongfigs = include dirname(__DIR__) . '/config/default.php';
         }
+        $curCongfigs = include dirname(__DIR__) . '/config/default.php';
         $this->account   = $curCongfigs['ChuangLan']['account'];
         $this->password  = $curCongfigs['ChuangLan']['password'];
         $this->url       = $curCongfigs['ChuangLan']['url'];

@@ -52,7 +52,7 @@ $obj->manager('ChuangLan')->sendSms('手机', '短信内容');
 
 //RongLan
 $obj = new Sms();
-$obj->manager('RongLan')->sendSms('手机',['8765', '1'], 1);参数详情参照容联文档
+$obj->manager('RongLan')->sendSms('手机',['8765', '1'], 1);//Refer to the documentation for RongLian details
 ```
 
 ## Configuration file description
@@ -63,8 +63,8 @@ return [
 
 	//ChuangLan253 SMS plateform
 	'ChuangLan' => [
-	    'account'  => '095389',//填写您自己的账号 (your account)
-		'password' => '7LOKagPs557e',//填写您自己的密码 (your password)
+	    'account'  => '095389',//your account
+		'password' => '7LOKagPs557e',//your password
 		'url'      => 'http://sms.253.com/msg/send',
 	],
 	//RongLian SMS platform

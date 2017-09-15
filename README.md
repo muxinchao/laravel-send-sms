@@ -63,8 +63,8 @@ return [
 
 	//ChuangLan253 SMS plateform
 	'ChuangLan' => [
-	    'account'  => '095389',//your account
-		'password' => '7LOKagPs557e',//your password
+	    'account'  => '095389',                               //your account
+		'password' => '7LOKagPs557e',             			  //your password
 		'url'      => 'http://sms.253.com/msg/send',
 	],
 	//RongLian SMS platform
